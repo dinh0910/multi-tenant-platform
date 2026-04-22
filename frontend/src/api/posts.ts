@@ -8,21 +8,21 @@ export const postsApi = {
     category_id?: string;
     tag_id?: string;
   } = {}): Promise<PaginatedPosts> =>
-    apiClient.get('/posts', { params }).then((r) => r.data),
+    apiClient.get('/posts', { params }),
 
   getBySlug: (slug: string): Promise<Post> =>
-    apiClient.get(`/posts/${slug}`).then((r) => r.data),
+    apiClient.get(`/posts/${slug}`),
 
   // Admin
   adminList: (params: { page?: number; page_size?: number } = {}): Promise<PaginatedPosts> =>
-    apiClient.get('/posts/admin/all', { params }).then((r) => r.data),
+    apiClient.get('/posts/admin/all', { params }),
 
   create: (data: PostCreate): Promise<Post> =>
-    apiClient.post('/posts', data).then((r) => r.data),
+    apiClient.post('/posts', data),
 
   update: (id: string, data: PostUpdate): Promise<Post> =>
-    apiClient.patch(`/posts/${id}`, data).then((r) => r.data),
+    apiClient.patch(`/posts/${id}`, data),
 
   delete: (id: string): Promise<void> =>
-    apiClient.delete(`/posts/${id}`).then(() => undefined),
+    apiClient.delete(`/posts/${id}`),
 };

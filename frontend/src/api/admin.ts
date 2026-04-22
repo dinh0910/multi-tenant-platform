@@ -6,33 +6,33 @@ import type { Tenant } from '../types/tenant';
 export const adminApi = {
   // Categories
   listCategories: (): Promise<Category[]> =>
-    apiClient.get('/categories').then((r) => r.data),
+    apiClient.get('/categories'),
   createCategory: (data: { name: string; description?: string }): Promise<Category> =>
-    apiClient.post('/categories', data).then((r) => r.data),
+    apiClient.post('/categories', data),
   deleteCategory: (id: string): Promise<void> =>
-    apiClient.delete(`/categories/${id}`).then(() => undefined),
+    apiClient.delete(`/categories/${id}`),
 
   // Tags
   listTags: (): Promise<Tag[]> =>
-    apiClient.get('/tags').then((r) => r.data),
+    apiClient.get('/tags'),
   createTag: (data: { name: string }): Promise<Tag> =>
-    apiClient.post('/tags', data).then((r) => r.data),
+    apiClient.post('/tags', data),
   deleteTag: (id: string): Promise<void> =>
-    apiClient.delete(`/tags/${id}`).then(() => undefined),
+    apiClient.delete(`/tags/${id}`),
 
   // Users
   listUsers: (): Promise<User[]> =>
-    apiClient.get('/users').then((r) => r.data),
+    apiClient.get('/users'),
   createUser: (data: Partial<User> & { password: string }): Promise<User> =>
-    apiClient.post('/users', data).then((r) => r.data),
+    apiClient.post('/users', data),
   deleteUser: (id: string): Promise<void> =>
-    apiClient.delete(`/users/${id}`).then(() => undefined),
+    apiClient.delete(`/users/${id}`),
 
-  // Tenants (super admin)
+  // Tenants
   listTenants: (): Promise<Tenant[]> =>
-    apiClient.get('/tenants').then((r) => r.data),
+    apiClient.get('/tenants'),
   createTenant: (data: Partial<Tenant>): Promise<Tenant> =>
-    apiClient.post('/tenants', data).then((r) => r.data),
+    apiClient.post('/tenants', data),
   updateTenant: (id: string, data: Partial<Tenant>): Promise<Tenant> =>
-    apiClient.patch(`/tenants/${id}`, data).then((r) => r.data),
+    apiClient.patch(`/tenants/${id}`, data),
 };

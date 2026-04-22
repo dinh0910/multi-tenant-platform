@@ -12,8 +12,14 @@ class AuthService:
     async def authenticate(self, email: str, password: str) -> User | None:
         result = await self.session.execute(select(User).where(User.email == email, User.is_active == True))
         user = result.scalar_one_or_none()
-        if not user or not verify_password(password, user.hashed_password):
+        
+        if not user:
             return None
+            
+        is_valid = verify_password(password, user.hashed_password)
+        if not is_valid:
+            return None
+            
         return user
 
     def create_tokens(self, user: User) -> dict:

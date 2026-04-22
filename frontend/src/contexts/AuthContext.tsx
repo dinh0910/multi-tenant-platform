@@ -1,13 +1,14 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import type { User } from '../types/user';
 import { authApi } from '../api/auth';
+import { tokenStorage } from '../api/client';
 
 interface AuthContextValue {
   user: User | null;
   isLoading: boolean;
+  isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
-  isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -17,8 +18,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   const loadUser = useCallback(async () => {
-    const token = localStorage.getItem('access_token');
-    if (!token) {
+    if (!tokenStorage.getAccess()) {
       setIsLoading(false);
       return;
     }
@@ -26,8 +26,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const me = await authApi.me();
       setUser(me);
     } catch {
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('refresh_token');
+      tokenStorage.clear();
     } finally {
       setIsLoading(false);
     }
@@ -39,20 +38,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = async (email: string, password: string) => {
     const tokens = await authApi.login({ email, password });
-    localStorage.setItem('access_token', tokens.access_token);
-    localStorage.setItem('refresh_token', tokens.refresh_token);
+    tokenStorage.set(tokens.access_token, tokens.refresh_token);
     const me = await authApi.me();
     setUser(me);
   };
 
   const logout = () => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
+    authApi.logout();
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, isLoading, isAuthenticated: !!user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

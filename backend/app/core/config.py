@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     # App
     APP_ENV: str = "development"
     DEBUG: bool = True
-    ALLOWED_ORIGINS: list[str] = ["http://localhost:3000", "http://localhost:5173"]
+    ALLOWED_ORIGINS: list[str] = ["http://localhost:3000", "http://localhost:5173", "http://localhost:8000"]
 
     # Uploads
     UPLOAD_DIR: str = "./uploads"

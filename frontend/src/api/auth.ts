@@ -1,17 +1,15 @@
-import axios from 'axios';
+import apiClient from './client';
 import type { LoginRequest, TokenResponse, User } from '../types/user';
 
 export const authApi = {
-  login: async (data: LoginRequest): Promise<TokenResponse> => {
-    const res = await axios.post('/api/v1/auth/login', data);
-    return res.data;
-  },
+  login: (data: LoginRequest): Promise<TokenResponse> => 
+    apiClient.post('/auth/login', data),
 
-  me: async (): Promise<User> => {
-    const token = localStorage.getItem('access_token');
-    const res = await axios.get('/api/v1/users/me', {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return res.data;
+  me: (): Promise<User> => 
+    apiClient.get('/users/me'),
+
+  logout: () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
   },
 };
